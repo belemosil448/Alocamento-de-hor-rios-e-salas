@@ -3,10 +3,11 @@ from grade import gradefuncao
 
 def on_button_click(label, text):
     label.config(text=text)
-
+def teste():
+    print("foi")
 root = tk.Tk()
 root.title("Menu")
-root.state('zoomed')  # Maximiza a janela
+#root.state('zoomed')  # Maximiza a janela
 
 # Cria um frame para os botões
 button_frame = tk.Frame(root, bg="black")
@@ -15,9 +16,14 @@ button_frame.pack(side=tk.LEFT, fill=tk.Y)
 # Cria um label centralizado
 label = tk.Label(root, text="Alocação de salas:", font=("Arial", 24))
 label.pack(pady=10)
+options = ["1° Semestre", "2° Semestre","3° Semestre","4° Semestre","5° Semestre","6° Semestre","7° Semestre","8° Semestre","9° Semestre","10° Semestre","Indefinido",]
+selected_option = tk.StringVar()
+selected_option.set(options[0])  # Definir o valor padrão
+option_menu = tk.OptionMenu(root, selected_option, *options, command=teste)
+option_menu.pack(pady=10)
 
 # Cria um label com planilha
-gradelabel = tk.Label(root, text= gradefuncao(root), font=("Arial", 24))
+gradelabel = tk.Label(root, text=gradefuncao(root), font=("Arial", 24))
 gradelabel.pack(pady=50)
 
 # Tamanho dos botões
