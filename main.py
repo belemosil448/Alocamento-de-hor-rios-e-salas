@@ -1,8 +1,7 @@
 import tkinter as tk
 from grade import gradefuncao
 from intregalizacaobuttons import realocar
-
-
+from tkinter import filedialog
 
 
 def on_button_click(label, text):
@@ -24,6 +23,16 @@ def semselecionado():
     if(semestre == "Indefinido"): intsemestre = 0
     print(intsemestre)
 
+
+
+def escolherplanilha():
+    # Função para abrir a janela do gerenciador de arquivos
+    root = tk.Tk()
+    root.withdraw()  # Esconde a janela principal
+    file_path = filedialog.askopenfilename()
+    text_box.delete('1.0', tk.END)
+    text_box.insert(tk.END, file_path)
+    return file_path
 
 root = tk.Tk()
 root.title("Menu")
@@ -59,7 +68,7 @@ button2 = tk.Button(button_frame, text="Abrir planilha", command=lambda: on_butt
 button2.pack(fill=tk.X, padx=5, pady=10)
 
 # Botão 3 (adicional)
-button3 = tk.Button(button_frame, text="Selecionar planilha", command=lambda: on_button_click(label, "Redirecionado para Opção 3"), bg="green", fg="white", width=button_width, height=button_height)
+button3 = tk.Button(button_frame, text="Selecionar planilha", command=lambda: on_button_click(escolherplanilha()), bg="green", fg="white", width=button_width, height=button_height)
 button3.pack(fill=tk.X, padx=5, pady=10)
 
 # Botão 4 (adicional)
@@ -71,6 +80,10 @@ button4.pack(fill=tk.X, padx=5, pady=10)
 # Botão rteste (adicional)
 button4 = tk.Button(button_frame, text="botão teste", command=lambda: on_button_click(semselecionado()), bg="green", fg="white", width=button_width, height=button_height)
 button4.pack(fill=tk.X, padx=5, pady=10)
+
+# Cria uma caixa de texto
+text_box = tk.Text(button_frame, height=3, width=20, bg="white")
+text_box.pack(fill=tk.X, padx=5, pady=5)
 
 # Executa a aplicação
 root.mainloop()
