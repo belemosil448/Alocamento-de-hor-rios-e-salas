@@ -27,6 +27,8 @@ def gradefuncao(root):
     first_cell.config(text="QUINTA")
     first_cell = grid_frame.grid_slaves(row=5, column=0)[0]
     first_cell.config(text="SEXTA")
-    
+    for v in range(13):
+        first_cell = grid_frame.grid_slaves(row=0, column=v)[0]
+        first_cell.config(text=v)  
     # Centraliza a grade na janela principal
     grid_frame.pack(expand=True)
