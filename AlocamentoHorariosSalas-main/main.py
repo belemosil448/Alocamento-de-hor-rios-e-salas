@@ -1,36 +1,38 @@
 import tkinter as tk
-from tkinter import filedialog, ttk
+from tkinter import filedialog, ttk, messagebox
 from openpyxl import load_workbook
-import subprocess
-import os
-from integralizacaobuttons import alocar_salas, escolher_planilha, abrir_planilha_semestre, salvar_planilha, criar_horarios
 
-def on_button_click(label, text):
-    label.config(text=text)
-
-def editar_celula(event):
-    selected_item = tree.selection()[0]
-    column = tree.identify_column(event.x)
-    column_index = int(column[1:]) - 1
-    entry = tk.Entry(root)
-    entry.place(x=event.x_root - root.winfo_rootx(), y=event.y_root - root.winfo_rooty())
-    entry.focus_set()
-
-    def save_edit(event):
-        new_value = entry.get()
-        tree.set(selected_item, column, new_value)
-        row_index = int(tree.index(selected_item)) + 2
-        current_sheet.cell(row=row_index, column=column_index + 1).value = new_value
-        entry.destroy()
-
-    entry.bind("<Return>", save_edit)
-
-root = tk.Tk()
-root.title("Menu")
+# Funções existentes do seu código
+from integralizacaobuttons import alocar_salas, escolher_planilha, abrir_planilha_semestre, salvar_planilha, current_sheet
 
 workbook = None
 current_sheet = None
 planilha_path = None
+
+def editar_celula(event):
+    item = tree.identify_row(event.y)
+    coluna = tree.identify_column(event.x)
+    valor_atual = tree.item(item, 'values')[int(coluna.replace('#', '')) - 1]
+
+    entry_editor = tk.Entry(root)
+    entry_editor.insert(0, valor_atual)
+    entry_editor.pack()
+    entry_editor.focus_set()
+
+    def salvar():
+        novo_valor = entry_editor.get()
+        tree.set(item, coluna, novo_valor)
+        entry_editor.pack_forget()
+        button_salvar.pack_forget()
+
+    button_salvar = tk.Button(root, text="Salvar", command=salvar)
+    button_salvar.pack()
+
+def on_button_click(label, text):
+    label.config(text=text)
+
+root = tk.Tk()
+root.title("Menu")
 
 button_frame = tk.Frame(root, bg="black")
 button_frame.pack(side=tk.LEFT, fill=tk.Y)
@@ -46,7 +48,16 @@ option_menu = tk.OptionMenu(root, selected_option, *options)
 option_menu.pack(pady=10)
 
 tree = ttk.Treeview(root, show="headings")
+tree['columns'] = ('col1', 'col2', 'col3')
+tree.heading('col1', text='Coluna 1')
+tree.heading('col2', text='Coluna 2')
+tree.heading('col3', text='Coluna 3')
 tree.pack(expand=True, fill=tk.BOTH)
+
+# Exemplo de inserção de dados na Treeview (substitua pelos seus dados)
+for i in range(10):
+    tree.insert('', tk.END, values=(f'Dado {i}', f'Dado {i+1}', f'Dado {i+2}'))
+
 tree.bind("<Double-1>", editar_celula)
 
 button_width = 20
@@ -63,6 +74,5 @@ button3.pack(fill=tk.X, padx=5, pady=10)
 
 button4 = tk.Button(button_frame, text="Salvar Alterações", command=salvar_planilha, bg="green", fg="white", width=button_width, height=button_height)
 button4.pack(fill=tk.X, padx=5, pady=10)
-
 
 root.mainloop()
